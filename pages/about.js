@@ -5,16 +5,22 @@ import utilStyles from "../styles/utils.module.css";
 import { ModalWindow } from "../components/Modal";
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.API_PATH}socials`);
-  const data = await res.json();
-  if (!data) {
+  try {
+    const res = await fetch(`${process.env.API_PATH}socials`);
+    const data = await res.json();
+    if (!data) {
+      return {
+        notFound: true,
+      };
+    }
     return {
-      notFound: true,
+      props: { socials: data },
+    };
+  } catch (error) {
+    return {
+      props: { socials: null },
     };
   }
-  return {
-    props: { socials: data },
-  };
 };
 
 export default function About({ socials }) {
